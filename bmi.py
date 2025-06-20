@@ -3,18 +3,25 @@
 # Author: Thimna Shushu
 # email: thimnashushu@gmail.com
 
+import plotly.graph_objects as go
+
+#from plotly_speedometer import SpeedometerController
+
 print("Enter Your Height in cm: ")
-height = int(input())
+height = float(input())
 print("Enter Your Weight in kg: ")
-weight=int(input())
+weight=float(input())
 print("Enter Your Age: ")
 age=int(input())
 print("Enter Your Gender (Male/Female): ")
 gender=input()
 
 #BMI Formula:
+height = height / 100
+bmi = weight/(height**2)
 
-bmi = weight//(height**2)
+
+    
 
 category = ""
 feedback=""
@@ -24,7 +31,7 @@ if age>=19:
     
     def ageCategory(age):
         
-        if age>20 and age<40:
+        if age>=20 and age<40:
             return  "20-39"
         elif age>39 and age<60:
             return "40-59"
@@ -56,13 +63,47 @@ if age>=19:
     for threshold, category in thresholds:
             if bmi < threshold:
                 feedback = category
+                break
     #Output
     print("============================")
     print("Your BMI Information:")
-    print("Gender: ",gender,"\nAge: ",age,"\nBMI:",feedback)
+    print("Gender: ",gender,"\nAge: ",age,"\nHeight: ", height*100, "\nWeight: ",weight, "\nBMI:",feedback)
     print("============================")
     
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=bmi,
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': f"BMI: {feedback}", 'font': {'size': 24}},
+        #delta={'reference': 25, 'increasing': {'color': "red"}, 'decreasing': {'color': "green"}},
+        gauge={
+            'axis': {'range': [None, 40], 'tickwidth': 1, 'tickcolor': "darkblue"},
+            'bar': {'color': "darkblue"},
+            'bgcolor': "white",
+            'borderwidth': 2,
+            'bordercolor': "gray",
+            'steps': [
+                {'range': [0, 18.5], 'color': 'lightblue'},      # Underweight
+                {'range': [18.5, 25], 'color': 'lightgreen'},    # Normal
+                {'range': [25, 30], 'color': 'yellow'},          # Overweight
+                {'range': [30, 40], 'color': 'lightcoral'}       # Obese
+            ],
+            'threshold': {
+                'line': {'color': "red", 'width': 4},
+                'thickness': 0.75,
+                'value': bmi
+            }
+        }
+    ))
     
+    # Update layout for better appearance
+    fig.update_layout(
+        paper_bgcolor="white",
+        height=400,
+        font={'color': "darkblue", 'family': "Arial"}
+    )
+    
+    fig.show()
 
 
 
