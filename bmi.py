@@ -98,7 +98,7 @@ if age>=19:
     
     # Update layout for better appearance
     fig.update_layout(
-        paper_bgcolor="white",
+        paper_bgcolor="violet",
         height=400,
         font={'color': "darkblue", 'family': "Arial"}
     )
